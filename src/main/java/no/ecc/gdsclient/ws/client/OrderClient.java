@@ -39,13 +39,10 @@ public class OrderClient extends CommonClient {
                     PermitEndDateRequest.class, qn), new BeanDeserializerFactory(
                     PermitEndDateRequest.class, qn));
             Integer orderNumber = (Integer) call.invoke(new Object[] { order });
-            getLogger().info("got order number: " + orderNumber.intValue());
             return orderNumber;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -68,10 +65,8 @@ public class OrderClient extends CommonClient {
             call.setReturnType(XMLType.XSD_BOOLEAN);
             return (Boolean) call.invoke(new Object[] { Integer.valueOf(orderId), Boolean.valueOf(sendPermitsByMail) });
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -88,10 +83,8 @@ public class OrderClient extends CommonClient {
             call.setReturnType(XMLType.XSD_BOOLEAN);
             call.invoke(new Object[] { Integer.valueOf(orderId) });
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }

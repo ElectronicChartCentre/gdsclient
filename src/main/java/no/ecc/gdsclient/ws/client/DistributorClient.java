@@ -49,10 +49,8 @@ public class DistributorClient extends CommonClient {
             Distributor[] d = (Distributor[]) call.invoke(new Object[] {});
             return d;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -71,10 +69,8 @@ public class DistributorClient extends CommonClient {
                     .valueOf(distributorId) });
             return di;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -92,10 +88,8 @@ public class DistributorClient extends CommonClient {
             call.setReturnType(XMLType.XSD_BOOLEAN);
             call.invoke(new Object[] { di });
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -113,10 +107,8 @@ public class DistributorClient extends CommonClient {
                     .invoke(new Object[] { Integer.valueOf(customerId) });
             return ci;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -133,10 +125,8 @@ public class DistributorClient extends CommonClient {
             call.setReturnType(XMLType.XSD_BOOLEAN);
             call.invoke(new Object[] { ci });
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -153,10 +143,8 @@ public class DistributorClient extends CommonClient {
             VesselInfo vi = (VesselInfo) call.invoke(new Object[] { Integer.valueOf(vesselId) });
             return vi;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -173,10 +161,8 @@ public class DistributorClient extends CommonClient {
             VesselInfo vi = (VesselInfo) call.invoke(new Object[] { vesselNo });
             return vi;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -193,10 +179,8 @@ public class DistributorClient extends CommonClient {
             VesselInfo vi = (VesselInfo) call.invoke(new Object[] { imoNumber });
             return vi;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -213,10 +197,8 @@ public class DistributorClient extends CommonClient {
             call.setReturnType(XMLType.XSD_BOOLEAN);
             call.invoke(new Object[] { vi });
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -237,10 +219,8 @@ public class DistributorClient extends CommonClient {
             VesselCategory[] vc = (VesselCategory[]) call.invoke(new Object[] {});
             return vc;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -260,10 +240,8 @@ public class DistributorClient extends CommonClient {
             VesselTonnage[] vt = (VesselTonnage[]) call.invoke(new Object[] {});
             return vt;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -284,10 +262,8 @@ public class DistributorClient extends CommonClient {
             Country[] cs = (Country[]) call.invoke(new Object[] {});
             return cs;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -307,10 +283,8 @@ public class DistributorClient extends CommonClient {
             CustomerType[] ct = (CustomerType[]) call.invoke(new Object[] {});
             return ct;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -330,10 +304,8 @@ public class DistributorClient extends CommonClient {
             DiscountGroup[] dgs = (DiscountGroup[]) call.invoke(new Object[] {});
             return dgs;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -355,10 +327,8 @@ public class DistributorClient extends CommonClient {
                     .invoke(new Object[] { Integer.valueOf(vesselId) });
             return ups;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -375,10 +345,8 @@ public class DistributorClient extends CommonClient {
             call.setReturnType(XMLType.XSD_BOOLEAN);
             call.invoke(new Object[] { userPermit });
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -395,10 +363,8 @@ public class DistributorClient extends CommonClient {
             call.setReturnType(XMLType.XSD_BOOLEAN);
             call.invoke(new Object[] { userPermit });
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -414,10 +380,8 @@ public class DistributorClient extends CommonClient {
             call.setReturnType(XMLType.XSD_INT);
             return (Integer) call.invoke(new Object[] { vesselId, userPermit });
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -433,10 +397,8 @@ public class DistributorClient extends CommonClient {
             call.setReturnType(XMLType.XSD_BOOLEAN);
             call.invoke(new Object[] { vesselId, userPermit, s63VersionId });
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }

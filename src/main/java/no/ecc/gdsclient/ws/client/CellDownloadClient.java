@@ -40,10 +40,8 @@ public class CellDownloadClient extends CommonClient {
             CellKey[] cellKeys = (CellKey[]) call.invoke(new Object[] { exportDate });
             return cellKeys;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -75,10 +73,8 @@ public class CellDownloadClient extends CommonClient {
                     status.toArray(new CellInfo[status.size()]) });
             return r.booleanValue();
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -98,10 +94,8 @@ public class CellDownloadClient extends CommonClient {
             call.setReturnType(qn);
             return (FileDownloadWrapper) call.invoke(new Object[] { Integer.valueOf(index) });
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -115,10 +109,8 @@ public class CellDownloadClient extends CommonClient {
             Boolean r = (Boolean) call.invoke(new Object[] {});
             return r.booleanValue();
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -143,10 +135,8 @@ public class CellDownloadClient extends CommonClient {
             call.setReturnType(qn);
             return (FileDownloadWrapper) call.invoke(new Object[] { cellId, edtn, updn, reissue, certificateFileName });
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }

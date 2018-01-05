@@ -8,7 +8,6 @@ import javax.xml.rpc.ServiceException;
 
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
-import org.apache.log4j.Logger;
 
 import no.ecc.gdsclient.utility.UrlPrefix;
 
@@ -18,19 +17,11 @@ import no.ecc.gdsclient.utility.UrlPrefix;
  */
 abstract class CommonClient {
     
-    private Logger log;
     private Service _service;
     private UrlPrefix urlPrefix;
 
     private String username;
     private String password;
-
-    protected Logger getLogger() {
-        if (log == null) {
-            log = Logger.getLogger(getClass());
-        }
-        return log;
-    }
 
     protected Call getNewCall() throws ServiceException, MalformedURLException {
         if (_service == null) {

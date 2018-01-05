@@ -35,10 +35,8 @@ public class ProductClient extends CommonClient {
             ProductPermit[] pp = (ProductPermit[]) call.invoke(new Object[] { userId });
             return pp;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
@@ -55,10 +53,8 @@ public class ProductClient extends CommonClient {
             String permitFile = (String) call.invoke(new Object[] { vesselId, userPermit, usePreviousEdition });
             return permitFile;
         } catch (MalformedURLException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
-            getLogger().error("", e);
             throw new RemoteException(e.getMessage());
         }
     }
