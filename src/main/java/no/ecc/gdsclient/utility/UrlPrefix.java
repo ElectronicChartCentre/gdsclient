@@ -108,16 +108,6 @@ public final class UrlPrefix implements Serializable {
         return context;
     }
 
-    public UrlPrefix toSchemeServerPort(String requestedScheme, Integer requestedServerPort) {
-        if (requestedScheme == null || requestedServerPort == null) {
-            return this;
-        }
-        if (requestedScheme.equals(schema) && requestedServerPort.intValue() == serverPort) {
-            return this;
-        }
-        return new UrlPrefix(requestedScheme, name, requestedServerPort.intValue(), localPort, context);
-    }
-
     @Override
     public String toString() {
         return getUrlPrefix();
