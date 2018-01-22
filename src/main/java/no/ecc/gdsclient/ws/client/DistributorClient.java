@@ -402,5 +402,27 @@ public class DistributorClient extends CommonClient {
             throw new RemoteException(e.getMessage());
         }
     }
+    
+    public VesselInfo[] getVesselInfosForUserPermit(String userPermit) throws RemoteException {
+        try {
+            Call call = getNewCall();
+            call.setOperationName(new QName("DistributorService", "getVesselInfosForUserPermit"));
+            
+            QName qn = new QName("http://stubs.ws.gds.ecc.no", "ArrayOf_tns3_VesselInfo");
+            call.registerTypeMapping(VesselInfo[].class, qn, new ArraySerializerFactory(),
+                    new ArrayDeserializerFactory());
+            call.setReturnType(qn);
+            qn = new QName("urn:BeanService", "VesselInfo");
+            call.registerTypeMapping(VesselInfo.class, qn, new BeanSerializerFactory(
+                    UserPermit.class, qn), new BeanDeserializerFactory(VesselInfo.class, qn));
+            call.addParameter("userPermit", XMLType.XSD_STRING, ParameterMode.IN);
+            VesselInfo[] vis = (VesselInfo[]) call.invoke(new Object[] { userPermit });
+            return vis;
+        } catch (MalformedURLException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (ServiceException e) {
+            throw new RemoteException(e.getMessage());
+        }
+    }
 
 }
