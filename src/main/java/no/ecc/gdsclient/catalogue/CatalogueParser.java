@@ -47,7 +47,7 @@ public class CatalogueParser implements Serializable {
     private final Multimap<String, Cell> cellsByCountryCode = HashMultimap.create();
     private final Map<String, Product> productById = new HashMap<>();
     private final Map<Integer, Country> countryById = new HashMap<>();
-    private final Map<String, Collection<Country>> countriesByCode = new HashMap<>();
+    private final Multimap<String, Country> countriesByCode = HashMultimap.create();
     private final Map<Integer, SubscriptionType> subscriptionTypeById = new HashMap<>();
     private final List<ProductReplace> productReplaces = new ArrayList<>();
     private final Map<Integer, SaleReportGroup> saleReportGroupById = new HashMap<>();
@@ -118,14 +118,9 @@ public class CatalogueParser implements Serializable {
             List<Element> countryNodes = catalogue.selectNodes("/catalogue/countries/country");
             for (Element countryNode : countryNodes) {
                 Country country = Country.parse(p, countryNode);
-                p.countryById.put(country.getId(), country);
-                Collection<Country> cs = p.countriesByCode.get(country.getCode());
-                if (cs == null) {
-                    cs = new ArrayList<CatalogueParser.Country>();
-                    p.countriesByCode.put(country.getCode(), cs);
-                }
                 country.saleReportGroup = p.saleReportGroupById.get(country.saleReportGroupId);
-                cs.add(country);
+                p.countryById.put(country.getId(), country);
+                p.countriesByCode.put(country.getCode(), country);
             }
 
             List<Element> cellNodes = catalogue.selectNodes("/catalogue/enc/cell");
