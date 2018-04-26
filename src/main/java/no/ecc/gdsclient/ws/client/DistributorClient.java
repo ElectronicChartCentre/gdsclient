@@ -21,6 +21,7 @@ import no.ecc.gdsclient.ws.impl.CustomerType;
 import no.ecc.gdsclient.ws.impl.DiscountGroup;
 import no.ecc.gdsclient.ws.impl.Distributor;
 import no.ecc.gdsclient.ws.impl.DistributorInfo;
+import no.ecc.gdsclient.ws.impl.IdName;
 import no.ecc.gdsclient.ws.impl.UserPermit;
 import no.ecc.gdsclient.ws.impl.Vessel;
 import no.ecc.gdsclient.ws.impl.VesselCategory;
@@ -38,11 +39,11 @@ public class DistributorClient extends CommonClient {
                     new ArrayDeserializerFactory());
             call.setReturnType(qn);
             qn = new QName("urn:BeanService", "Distributor");
-            call.registerTypeMapping(Distributor.class, qn, new BeanSerializerFactory(
-                    Distributor.class, qn), new BeanDeserializerFactory(Distributor.class, qn));
+            call.registerTypeMapping(Distributor.class, qn, new BeanSerializerFactory(Distributor.class, qn),
+                    new BeanDeserializerFactory(Distributor.class, qn));
             qn = new QName("urn:BeanService", "Customer");
-            call.registerTypeMapping(Customer.class, qn, new BeanSerializerFactory(Customer.class,
-                    qn), new BeanDeserializerFactory(Customer.class, qn));
+            call.registerTypeMapping(Customer.class, qn, new BeanSerializerFactory(Customer.class, qn),
+                    new BeanDeserializerFactory(Customer.class, qn));
             qn = new QName("urn:BeanService", "Vessel");
             call.registerTypeMapping(Vessel.class, qn, new BeanSerializerFactory(Vessel.class, qn),
                     new BeanDeserializerFactory(Vessel.class, qn));
@@ -60,13 +61,11 @@ public class DistributorClient extends CommonClient {
             Call call = getNewCall();
             call.setOperationName(new QName("DistributorService", "getDistributorInfo"));
             QName qn = new QName("urn:BeanService", "DistributorInfo");
-            call.registerTypeMapping(DistributorInfo.class, qn, new BeanSerializerFactory(
-                    DistributorInfo.class, qn), new BeanDeserializerFactory(DistributorInfo.class,
-                    qn));
+            call.registerTypeMapping(DistributorInfo.class, qn, new BeanSerializerFactory(DistributorInfo.class, qn),
+                    new BeanDeserializerFactory(DistributorInfo.class, qn));
             call.addParameter("distributorId", XMLType.XSD_INTEGER, ParameterMode.IN);
             call.setReturnType(qn);
-            DistributorInfo di = (DistributorInfo) call.invoke(new Object[] { Integer
-                    .valueOf(distributorId) });
+            DistributorInfo di = (DistributorInfo) call.invoke(new Object[] { Integer.valueOf(distributorId) });
             return di;
         } catch (MalformedURLException e) {
             throw new RemoteException(e.getMessage());
@@ -81,9 +80,8 @@ public class DistributorClient extends CommonClient {
             call = getNewCall();
             call.setOperationName(new QName("DistributorService", "saveDistributorInfo"));
             QName qn = new QName("urn:BeanService", "DistributorInfo");
-            call.registerTypeMapping(DistributorInfo.class, qn, new BeanSerializerFactory(
-                    DistributorInfo.class, qn), new BeanDeserializerFactory(DistributorInfo.class,
-                    qn));
+            call.registerTypeMapping(DistributorInfo.class, qn, new BeanSerializerFactory(DistributorInfo.class, qn),
+                    new BeanDeserializerFactory(DistributorInfo.class, qn));
             call.addParameter("distributor", qn, ParameterMode.IN);
             call.setReturnType(XMLType.XSD_BOOLEAN);
             call.invoke(new Object[] { di });
@@ -99,12 +97,11 @@ public class DistributorClient extends CommonClient {
             Call call = getNewCall();
             call.setOperationName(new QName("DistributorService", "getCustomerInfo"));
             QName qn = new QName("urn:BeanService", "CustomerInfo");
-            call.registerTypeMapping(CustomerInfo.class, qn, new BeanSerializerFactory(
-                    CustomerInfo.class, qn), new BeanDeserializerFactory(CustomerInfo.class, qn));
+            call.registerTypeMapping(CustomerInfo.class, qn, new BeanSerializerFactory(CustomerInfo.class, qn),
+                    new BeanDeserializerFactory(CustomerInfo.class, qn));
             call.addParameter("customerId", XMLType.XSD_INTEGER, ParameterMode.IN);
             call.setReturnType(qn);
-            CustomerInfo ci = (CustomerInfo) call
-                    .invoke(new Object[] { Integer.valueOf(customerId) });
+            CustomerInfo ci = (CustomerInfo) call.invoke(new Object[] { Integer.valueOf(customerId) });
             return ci;
         } catch (MalformedURLException e) {
             throw new RemoteException(e.getMessage());
@@ -119,8 +116,8 @@ public class DistributorClient extends CommonClient {
             call = getNewCall();
             call.setOperationName(new QName("DistributorService", "saveCustomerInfo"));
             QName qn = new QName("urn:BeanService", "CustomerInfo");
-            call.registerTypeMapping(CustomerInfo.class, qn, new BeanSerializerFactory(
-                    CustomerInfo.class, qn), new BeanDeserializerFactory(CustomerInfo.class, qn));
+            call.registerTypeMapping(CustomerInfo.class, qn, new BeanSerializerFactory(CustomerInfo.class, qn),
+                    new BeanDeserializerFactory(CustomerInfo.class, qn));
             call.addParameter("customer", qn, ParameterMode.IN);
             call.setReturnType(XMLType.XSD_BOOLEAN);
             call.invoke(new Object[] { ci });
@@ -130,14 +127,33 @@ public class DistributorClient extends CommonClient {
             throw new RemoteException(e.getMessage());
         }
     }
+    
+    public int saveCustomerInfoAndReturnId(CustomerInfo ci) throws RemoteException {
+        Call call;
+        try {
+            call = getNewCall();
+            call.setOperationName(new QName("DistributorService", "saveCustomerInfoAndReturnId"));
+            QName qn = new QName("urn:BeanService", "CustomerInfo");
+            call.registerTypeMapping(CustomerInfo.class, qn, new BeanSerializerFactory(CustomerInfo.class, qn),
+                    new BeanDeserializerFactory(CustomerInfo.class, qn));
+            call.addParameter("customer", qn, ParameterMode.IN);
+            call.setReturnType(XMLType.XSD_INT);
+            return (Integer) call.invoke(new Object[] { ci });
+        } catch (MalformedURLException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (ServiceException e) {
+            throw new RemoteException(e.getMessage());
+        }
+    }
+
 
     public VesselInfo getVesselInfo(int vesselId) throws RemoteException {
         try {
             Call call = getNewCall();
             call.setOperationName(new QName("DistributorService", "getVesselInfo"));
             QName qn = new QName("urn:BeanService", "VesselInfo");
-            call.registerTypeMapping(VesselInfo.class, qn, new BeanSerializerFactory(
-                    VesselInfo.class, qn), new BeanDeserializerFactory(VesselInfo.class, qn));
+            call.registerTypeMapping(VesselInfo.class, qn, new BeanSerializerFactory(VesselInfo.class, qn),
+                    new BeanDeserializerFactory(VesselInfo.class, qn));
             call.addParameter("vesselId", XMLType.XSD_INTEGER, ParameterMode.IN);
             call.setReturnType(qn);
             VesselInfo vi = (VesselInfo) call.invoke(new Object[] { Integer.valueOf(vesselId) });
@@ -154,8 +170,8 @@ public class DistributorClient extends CommonClient {
             Call call = getNewCall();
             call.setOperationName(new QName("DistributorService", "getVesselInfoByVesselNo"));
             QName qn = new QName("urn:BeanService", "VesselInfo");
-            call.registerTypeMapping(VesselInfo.class, qn, new BeanSerializerFactory(
-                    VesselInfo.class, qn), new BeanDeserializerFactory(VesselInfo.class, qn));
+            call.registerTypeMapping(VesselInfo.class, qn, new BeanSerializerFactory(VesselInfo.class, qn),
+                    new BeanDeserializerFactory(VesselInfo.class, qn));
             call.addParameter("vesselNo", XMLType.XSD_STRING, ParameterMode.IN);
             call.setReturnType(qn);
             VesselInfo vi = (VesselInfo) call.invoke(new Object[] { vesselNo });
@@ -172,8 +188,8 @@ public class DistributorClient extends CommonClient {
             Call call = getNewCall();
             call.setOperationName(new QName("DistributorService", "getRemoteVesselInfoByIMO"));
             QName qn = new QName("urn:BeanService", "VesselInfo");
-            call.registerTypeMapping(VesselInfo.class, qn, new BeanSerializerFactory(
-                    VesselInfo.class, qn), new BeanDeserializerFactory(VesselInfo.class, qn));
+            call.registerTypeMapping(VesselInfo.class, qn, new BeanSerializerFactory(VesselInfo.class, qn),
+                    new BeanDeserializerFactory(VesselInfo.class, qn));
             call.addParameter("imoNumber", XMLType.XSD_STRING, ParameterMode.IN);
             call.setReturnType(qn);
             VesselInfo vi = (VesselInfo) call.invoke(new Object[] { imoNumber });
@@ -191,11 +207,29 @@ public class DistributorClient extends CommonClient {
             call = getNewCall();
             call.setOperationName(new QName("DistributorService", "saveVesselInfo"));
             QName qn = new QName("urn:BeanService", "VesselInfo");
-            call.registerTypeMapping(VesselInfo.class, qn, new BeanSerializerFactory(
-                    VesselInfo.class, qn), new BeanDeserializerFactory(VesselInfo.class, qn));
+            call.registerTypeMapping(VesselInfo.class, qn, new BeanSerializerFactory(VesselInfo.class, qn),
+                    new BeanDeserializerFactory(VesselInfo.class, qn));
             call.addParameter("customer", qn, ParameterMode.IN);
             call.setReturnType(XMLType.XSD_BOOLEAN);
             call.invoke(new Object[] { vi });
+        } catch (MalformedURLException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (ServiceException e) {
+            throw new RemoteException(e.getMessage());
+        }
+    }
+    
+    public int saveVesselInfoAndReturnId(VesselInfo vi) throws RemoteException {
+        Call call;
+        try {
+            call = getNewCall();
+            call.setOperationName(new QName("DistributorService", "saveVesselInfoAndReturnId"));
+            QName qn = new QName("urn:BeanService", "VesselInfo");
+            call.registerTypeMapping(VesselInfo.class, qn, new BeanSerializerFactory(VesselInfo.class, qn),
+                    new BeanDeserializerFactory(VesselInfo.class, qn));
+            call.addParameter("customer", qn, ParameterMode.IN);
+            call.setReturnType(XMLType.XSD_INT);
+            return (Integer) call.invoke(new Object[] { vi });
         } catch (MalformedURLException e) {
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
@@ -213,8 +247,7 @@ public class DistributorClient extends CommonClient {
                     new ArrayDeserializerFactory());
             call.setReturnType(qn);
             qn = new QName("urn:BeanService", "VesselCategory");
-            call.registerTypeMapping(VesselCategory.class, qn, new BeanSerializerFactory(
-                    VesselCategory.class, qn),
+            call.registerTypeMapping(VesselCategory.class, qn, new BeanSerializerFactory(VesselCategory.class, qn),
                     new BeanDeserializerFactory(VesselCategory.class, qn));
             VesselCategory[] vc = (VesselCategory[]) call.invoke(new Object[] {});
             return vc;
@@ -235,8 +268,8 @@ public class DistributorClient extends CommonClient {
                     new ArrayDeserializerFactory());
             call.setReturnType(qn);
             qn = new QName("urn:BeanService", "VesselTonnage");
-            call.registerTypeMapping(VesselTonnage.class, qn, new BeanSerializerFactory(
-                    VesselTonnage.class, qn), new BeanDeserializerFactory(VesselTonnage.class, qn));
+            call.registerTypeMapping(VesselTonnage.class, qn, new BeanSerializerFactory(VesselTonnage.class, qn),
+                    new BeanDeserializerFactory(VesselTonnage.class, qn));
             VesselTonnage[] vt = (VesselTonnage[]) call.invoke(new Object[] {});
             return vt;
         } catch (MalformedURLException e) {
@@ -252,13 +285,11 @@ public class DistributorClient extends CommonClient {
             call = getNewCall();
             call.setOperationName(new QName("DistributorService", "getAllCountries"));
             QName qn = new QName("http://stubs.ws.gds.ecc.no", "ArrayOf_tns3_Country");
-            call.registerTypeMapping(Country[].class, qn, new ArraySerializerFactory(),
-                    new ArrayDeserializerFactory());
+            call.registerTypeMapping(Country[].class, qn, new ArraySerializerFactory(), new ArrayDeserializerFactory());
             call.setReturnType(qn);
             qn = new QName("urn:BeanService", "Country");
-            call.registerTypeMapping(Country.class, qn,
-                    new BeanSerializerFactory(Country.class, qn), new BeanDeserializerFactory(
-                            Country.class, qn));
+            call.registerTypeMapping(Country.class, qn, new BeanSerializerFactory(Country.class, qn),
+                    new BeanDeserializerFactory(Country.class, qn));
             Country[] cs = (Country[]) call.invoke(new Object[] {});
             return cs;
         } catch (MalformedURLException e) {
@@ -278,8 +309,8 @@ public class DistributorClient extends CommonClient {
                     new ArrayDeserializerFactory());
             call.setReturnType(qn);
             qn = new QName("urn:BeanService", "CustomerType");
-            call.registerTypeMapping(Country.class, qn, new BeanSerializerFactory(
-                    CustomerType.class, qn), new BeanDeserializerFactory(CustomerType.class, qn));
+            call.registerTypeMapping(Country.class, qn, new BeanSerializerFactory(CustomerType.class, qn),
+                    new BeanDeserializerFactory(CustomerType.class, qn));
             CustomerType[] ct = (CustomerType[]) call.invoke(new Object[] {});
             return ct;
         } catch (MalformedURLException e) {
@@ -299,8 +330,8 @@ public class DistributorClient extends CommonClient {
                     new ArrayDeserializerFactory());
             call.setReturnType(qn);
             qn = new QName("urn:BeanService", "DiscountGroup");
-            call.registerTypeMapping(Country.class, qn, new BeanSerializerFactory(
-                    DiscountGroup.class, qn), new BeanDeserializerFactory(DiscountGroup.class, qn));
+            call.registerTypeMapping(Country.class, qn, new BeanSerializerFactory(DiscountGroup.class, qn),
+                    new BeanDeserializerFactory(DiscountGroup.class, qn));
             DiscountGroup[] dgs = (DiscountGroup[]) call.invoke(new Object[] {});
             return dgs;
         } catch (MalformedURLException e) {
@@ -320,11 +351,10 @@ public class DistributorClient extends CommonClient {
                     new ArrayDeserializerFactory());
             call.setReturnType(qn);
             qn = new QName("urn:BeanService", "UserPermit");
-            call.registerTypeMapping(UserPermit.class, qn, new BeanSerializerFactory(
-                    UserPermit.class, qn), new BeanDeserializerFactory(UserPermit.class, qn));
+            call.registerTypeMapping(UserPermit.class, qn, new BeanSerializerFactory(UserPermit.class, qn),
+                    new BeanDeserializerFactory(UserPermit.class, qn));
             call.addParameter("vesselId", XMLType.XSD_INTEGER, ParameterMode.IN);
-            UserPermit[] ups = (UserPermit[]) call
-                    .invoke(new Object[] { Integer.valueOf(vesselId) });
+            UserPermit[] ups = (UserPermit[]) call.invoke(new Object[] { Integer.valueOf(vesselId) });
             return ups;
         } catch (MalformedURLException e) {
             throw new RemoteException(e.getMessage());
@@ -339,8 +369,8 @@ public class DistributorClient extends CommonClient {
             call = getNewCall();
             call.setOperationName(new QName("DistributorService", "deleteUserPermit"));
             QName qn = new QName("urn:BeanService", "UserPermit");
-            call.registerTypeMapping(UserPermit.class, qn, new BeanSerializerFactory(
-                    UserPermit.class, qn), new BeanDeserializerFactory(UserPermit.class, qn));
+            call.registerTypeMapping(UserPermit.class, qn, new BeanSerializerFactory(UserPermit.class, qn),
+                    new BeanDeserializerFactory(UserPermit.class, qn));
             call.addParameter("userPermit", qn, ParameterMode.IN);
             call.setReturnType(XMLType.XSD_BOOLEAN);
             call.invoke(new Object[] { userPermit });
@@ -357,8 +387,8 @@ public class DistributorClient extends CommonClient {
             call = getNewCall();
             call.setOperationName(new QName("DistributorService", "saveUserPermit"));
             QName qn = new QName("urn:BeanService", "UserPermit");
-            call.registerTypeMapping(UserPermit.class, qn, new BeanSerializerFactory(
-                    UserPermit.class, qn), new BeanDeserializerFactory(UserPermit.class, qn));
+            call.registerTypeMapping(UserPermit.class, qn, new BeanSerializerFactory(UserPermit.class, qn),
+                    new BeanDeserializerFactory(UserPermit.class, qn));
             call.addParameter("userPermit", qn, ParameterMode.IN);
             call.setReturnType(XMLType.XSD_BOOLEAN);
             call.invoke(new Object[] { userPermit });
@@ -369,9 +399,8 @@ public class DistributorClient extends CommonClient {
         }
     }
 
-    public Integer getS63VersionId(Integer vesselId, String userPermit)
-            throws RemoteException {
-        
+    public Integer getS63VersionId(Integer vesselId, String userPermit) throws RemoteException {
+
         try {
             Call call = getNewCall();
             call.setOperationName(new QName("DistributorService", "getS63VersionId"));
@@ -385,9 +414,8 @@ public class DistributorClient extends CommonClient {
             throw new RemoteException(e.getMessage());
         }
     }
-    
-    public void saveS63VersionId(Integer vesselId, String userPermit, Integer s63VersionId)
-            throws RemoteException {
+
+    public void saveS63VersionId(Integer vesselId, String userPermit, Integer s63VersionId) throws RemoteException {
         try {
             Call call = getNewCall();
             call.setOperationName(new QName("DistributorService", "saveS63VersionId"));
@@ -402,23 +430,88 @@ public class DistributorClient extends CommonClient {
             throw new RemoteException(e.getMessage());
         }
     }
-    
+
     public VesselInfo[] getVesselInfosForUserPermit(String userPermit) throws RemoteException {
         try {
             Call call = getNewCall();
             call.setOperationName(new QName("DistributorService", "getVesselInfosForUserPermit"));
-            
+
             QName qn = new QName("http://stubs.ws.gds.ecc.no", "ArrayOf_tns3_VesselInfo");
             call.registerTypeMapping(VesselInfo[].class, qn, new ArraySerializerFactory(),
                     new ArrayDeserializerFactory());
             call.setReturnType(qn);
             qn = new QName("urn:BeanService", "VesselInfo");
-            call.registerTypeMapping(VesselInfo.class, qn, new BeanSerializerFactory(
-                    UserPermit.class, qn), new BeanDeserializerFactory(VesselInfo.class, qn));
+            call.registerTypeMapping(VesselInfo.class, qn, new BeanSerializerFactory(UserPermit.class, qn),
+                    new BeanDeserializerFactory(VesselInfo.class, qn));
             call.addParameter("userPermit", XMLType.XSD_STRING, ParameterMode.IN);
             VesselInfo[] vis = (VesselInfo[]) call.invoke(new Object[] { userPermit });
             return vis;
         } catch (MalformedURLException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (ServiceException e) {
+            throw new RemoteException(e.getMessage());
+        }
+    }
+
+    public IdName[] getDistributorIdNames() throws RemoteException {
+        try {
+            Call call = getNewCall();
+            call.setOperationName(new QName("DistributorService", "getDistributorIdNames"));
+            QName qn = new QName("http://stubs.ws.gds.ecc.no", "ArrayOf_tns3_IdName");
+            call.registerTypeMapping(IdName[].class, qn, new ArraySerializerFactory(), new ArrayDeserializerFactory());
+            call.setReturnType(qn);
+            qn = new QName("urn:BeanService", "IdName");
+            call.registerTypeMapping(IdName.class, qn, new BeanSerializerFactory(IdName.class, qn),
+                    new BeanDeserializerFactory(IdName.class, qn));
+            IdName[] d = (IdName[]) call.invoke(new Object[] {});
+            return d;
+        } catch (MalformedURLException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (RemoteException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (ServiceException e) {
+            throw new RemoteException(e.getMessage());
+        }
+    }
+
+    public IdName[] getCustomerIdNames(int distId) throws RemoteException {
+        try {
+            Call call = getNewCall();
+            call.setOperationName(new QName("DistributorService", "getCustomerIdNames"));
+            QName qn = new QName("http://stubs.ws.gds.ecc.no", "ArrayOf_tns3_IdName");
+            call.registerTypeMapping(IdName[].class, qn, new ArraySerializerFactory(), new ArrayDeserializerFactory());
+            call.addParameter("distId", XMLType.XSD_INTEGER, ParameterMode.IN);
+            call.setReturnType(qn);
+            qn = new QName("urn:BeanService", "IdName");
+            call.registerTypeMapping(IdName.class, qn, new BeanSerializerFactory(IdName.class, qn),
+                    new BeanDeserializerFactory(IdName.class, qn));
+            IdName[] d = (IdName[]) call.invoke(new Object[] { Integer.valueOf(distId) });
+            return d;
+        } catch (MalformedURLException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (RemoteException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (ServiceException e) {
+            throw new RemoteException(e.getMessage());
+        }
+    }
+
+    public Vessel[] getVessels(int custId) throws RemoteException {
+        try {
+            Call call = getNewCall();
+            call.setOperationName(new QName("DistributorService", "getVessels"));
+            QName qn = new QName("http://stubs.ws.gds.ecc.no", "ArrayOf_tns3_Vessel");
+            call.registerTypeMapping(Vessel[].class, qn, new ArraySerializerFactory(), new ArrayDeserializerFactory());
+            call.addParameter("custId", XMLType.XSD_INTEGER, ParameterMode.IN);
+            call.setReturnType(qn);
+            qn = new QName("urn:BeanService", "Vessel");
+            call.registerTypeMapping(Vessel.class, qn, new BeanSerializerFactory(Vessel.class, qn),
+                    new BeanDeserializerFactory(Vessel.class, qn));
+            Vessel[] d = (Vessel[]) call.invoke(new Object[] { Integer.valueOf(custId) });
+            return d;
+        } catch (MalformedURLException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (RemoteException e) {
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
             throw new RemoteException(e.getMessage());

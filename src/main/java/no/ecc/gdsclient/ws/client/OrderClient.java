@@ -12,7 +12,9 @@ import org.apache.axis.encoding.XMLType;
 import org.apache.axis.encoding.ser.BeanDeserializerFactory;
 import org.apache.axis.encoding.ser.BeanSerializerFactory;
 
+import no.ecc.gdsclient.ws.impl.OrderProductReport;
 import no.ecc.gdsclient.ws.impl.OrderProductRequest;
+import no.ecc.gdsclient.ws.impl.OrderReport;
 import no.ecc.gdsclient.ws.impl.OrderRequest;
 import no.ecc.gdsclient.ws.impl.PermitEndDateRequest;
 
@@ -88,5 +90,39 @@ public class OrderClient extends CommonClient {
             throw new RemoteException(e.getMessage());
         }
     }
+    
+    public OrderReport getOrderReport(int orderId) throws RemoteException {
+        Call call;
+        try {
+            call = getNewCall();
+            call.setTimeout(Integer.valueOf(1000 * 60 * 3)); // millis
+            call.setOperationName(new QName("OrderService", "getOrderReport"));
+            QName qn = new QName("urn:BeanService", "OrderReport");
+            call.registerTypeMapping(
+                OrderReport.class,
+                qn,
+                new BeanSerializerFactory(OrderReport.class, qn),
+                new BeanDeserializerFactory(OrderReport.class, qn));
+            call.addParameter("orderId", XMLType.XSD_INTEGER, ParameterMode.IN);
+            call.setReturnType(qn);
+            qn = new QName("urn:BeanService", "OrderProductReport");
+            call.registerTypeMapping(
+                OrderProductReport.class,
+                qn,
+                new BeanSerializerFactory(OrderProductReport.class, qn),
+                new BeanDeserializerFactory(OrderProductReport.class, qn));
+            OrderReport orderReport =
+                (OrderReport) call.invoke(new Object[] { Integer.valueOf(orderId)});
+            return orderReport;
+        } catch (MalformedURLException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (ServiceException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (RemoteException e) {
+            throw new RemoteException(e.getMessage());
+        }
+
+    }
+
 
 }
