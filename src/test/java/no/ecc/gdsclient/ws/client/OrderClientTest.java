@@ -62,6 +62,9 @@ public class OrderClientTest extends GdsClientTestCase {
         assertNotNull(orderReport);
         assertEquals(1, orderReport.getOrderProducts().length);
 
+        // to activate the order
+        // oc.activateOrder(orderId, false);
+        
     }
 
 }
