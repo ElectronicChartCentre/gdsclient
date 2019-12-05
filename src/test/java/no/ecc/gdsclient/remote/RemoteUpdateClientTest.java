@@ -84,7 +84,7 @@ public class RemoteUpdateClientTest extends GdsClientTestCase {
                         decompressedData = ByteStreams.toByteArray(zis);
                     }
 
-                    // output start of file to console.
+                    // collect text version of start of file for testing.
                     fileStartAsStringByFileName.put(fileName, new String(decompressedData, 0, 100, "UTF-8"));
                 }
 
