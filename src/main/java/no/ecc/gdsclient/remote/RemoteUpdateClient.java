@@ -1,5 +1,6 @@
 package no.ecc.gdsclient.remote;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,6 +17,8 @@ import java.util.zip.ZipInputStream;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+
+import com.google.common.io.ByteStreams;
 
 import no.ecc.gdsclient.exchangeset.CellUpdate;
 import no.ecc.gdsclient.utility.FileUtils;
@@ -139,7 +142,9 @@ public class RemoteUpdateClient {
                 // extract metadata to find extra files outside of the first zip stream
                 if (fileName.equals(ResponseMetadata.FILENAME)) {
                     try {
-                        responseMetadata = new ResponseMetadata(zis);
+                        // read to byte[] first as XMLStreamReader closes the underlying stream
+                        byte[] data = ByteStreams.toByteArray(zis);
+                        responseMetadata = new ResponseMetadata(new ByteArrayInputStream(data));
                     } catch (XMLStreamException e) {
                         throw new IOException("Could not parse remote metadata", e);
                     }

@@ -60,6 +60,7 @@ public class RemoteUpdateClientTest extends GdsClientTestCase {
             try {
                 byte[] data = ByteStreams.toByteArray(in);
                 if (fileName.equals(S100PermitFile.PERMIT_DOT_XML)) {
+                    // read to byte[] first as XMLStreamReader closes the underlying stream
                     S100PermitFile permitFile = new S100PermitFile(manufacturerLookup, new ByteArrayInputStream(data));
                     for (S100DataPermit dataPermit : permitFile.getDataPermits()) {
                         dataPermitByDataSetId.put(dataPermit.getDataSetId(), dataPermit);
