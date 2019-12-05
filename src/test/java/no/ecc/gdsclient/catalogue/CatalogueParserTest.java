@@ -9,7 +9,7 @@ import no.ecc.gdsclient.junit.GdsClientTestCase;
 public class CatalogueParserTest extends GdsClientTestCase {
 
     public void testCatalogueParser() throws IOException, DocumentException {
-        CatalogueParser cp = CatalogueParser.create(getUrlPrefix());
+        CatalogueParser cp = CatalogueParser.create(getAnonUrlPrefix());
         assertFalse(cp.getCells().isEmpty());
     }
 

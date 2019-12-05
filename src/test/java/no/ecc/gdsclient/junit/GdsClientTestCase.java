@@ -18,4 +18,15 @@ public abstract class GdsClientTestCase extends TestCase {
         return urlPrefix;
     }
 
+    protected String getAnonUrlPrefix() {
+        String urlPrefix = System.getProperty(URL_PREFIX_KEY);
+        if (urlPrefix == null) {
+            urlPrefix = System.getenv(URL_PREFIX_KEY);
+        }
+        if (urlPrefix == null) {
+            fail("missing property " + URL_PREFIX_KEY + " set to something like https://qaprimar.ecc.no/qaprimar");
+        }
+        return urlPrefix;
+    }
+
 }
