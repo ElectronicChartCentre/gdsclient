@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.zip.CRC32;
+import java.util.zip.CheckedInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -175,6 +177,19 @@ public class RemoteUpdateClient {
             }
             fileUrl.append(file.getPath());
 
+            URL furl = new URL(fileUrl.toString());
+            try (InputStream uis = furl.openStream(); CheckedInputStream cis = new CheckedInputStream(uis, new CRC32())) {
+                receiver.receive(file.getPath(), cis);
+                
+                // check content using the given crc32
+                long expectedCrc = Long.parseUnsignedLong(file.getCrcs(), 16);
+                long realCrc = cis.getChecksum().getValue();
+                if (expectedCrc != realCrc) {
+                    throw new IOException(
+                            "Expected CRC32 " + expectedCrc + ", but got " + realCrc + " for " + file.getPath());
+                }
+                
+            }
             receiver.receive(file.getPath(), new URL(fileUrl.toString()).openStream());
         }
 
