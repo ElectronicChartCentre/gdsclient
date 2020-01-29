@@ -49,8 +49,8 @@ abstract class CommonClient {
     }
 
     public void setUrlPrefix(String url) throws MalformedURLException {
-        URL u = new URL(url);
-        setUrlPrefix(new UrlPrefix(u));
+        UrlPrefix u = new UrlPrefix(url);
+        setUrlPrefix(u);
         String userInfo = u.getUserInfo();
         if (userInfo != null) {
             StringTokenizer st = new StringTokenizer(userInfo, ":");

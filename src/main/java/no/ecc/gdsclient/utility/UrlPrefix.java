@@ -1,7 +1,6 @@
 package no.ecc.gdsclient.utility;
 
 import java.io.Serializable;
-import java.net.URL;
 
 /**
  * A class representing the url prefix of a java web application.
@@ -13,40 +12,38 @@ public final class UrlPrefix implements Serializable {
     private final String schema;
     private final String name;
     private final int serverPort;
-    private final int localPort;
     private final String context;
+    private final String userInfo;
 
     private transient String urlPrefix;
 
-    public UrlPrefix(String schema, String name, int serverPort, int localPort, String context) {
-        this.schema = schema;
-        this.name = name;
-        this.serverPort = serverPort;
-        this.localPort = localPort;
-
-        if (!context.startsWith("/")) {
-            context = "/" + context;
-        }
-
-        this.context = context;
-    }
-
-    public UrlPrefix(URL url) {
-        this.schema = url.getProtocol();
-        this.name = url.getHost();
-        if (url.getPort() > 0) {
-            this.serverPort = url.getPort();
+    public UrlPrefix(String url) {
+        int schemaEndIndex = url.indexOf("://");
+        this.schema = url.substring(0, schemaEndIndex);
+        int lastAlphaIndex = url.lastIndexOf('@');
+        int pathStart = 0;
+        String hostName = null;
+        if (lastAlphaIndex >= 0) {
+            // has user info
+            pathStart = url.indexOf('/', lastAlphaIndex);
+            this.userInfo = url.substring(schemaEndIndex + 3, lastAlphaIndex);
+            hostName = url.substring(lastAlphaIndex + 1, pathStart);
         } else {
-            this.serverPort = url.getDefaultPort();
+            // no user info
+            pathStart = url.indexOf('/', schemaEndIndex + 3);
+            hostName = url.substring(schemaEndIndex + 3, pathStart);
+            this.userInfo = null;
         }
-        this.localPort = -1;
-        String path = url.getPath();
-        String[] pathElems = path.split("/");
-        if (pathElems.length > 1) {
-            this.context = '/' + pathElems[1];
+        int nameColonPos = hostName.indexOf(':');
+        if (nameColonPos > 0) {
+            // has port
+            serverPort = Integer.parseInt(hostName.substring(nameColonPos + 1));
+            hostName = hostName.substring(0, nameColonPos);
         } else {
-            this.context = path;
+            serverPort = "http".equals(schema) ? 80 : 443;
         }
+        this.name = hostName;
+        this.context = url.substring(pathStart);
     }
 
     private boolean isCustomPort() {
@@ -56,14 +53,9 @@ public final class UrlPrefix implements Serializable {
         if (schema == null) {
             return false;
         }
-        return (schema.equals("http") && (serverPort != 80))
-                || (schema.equals("https") && (serverPort != 443));
+        return (schema.equals("http") && (serverPort != 80)) || (schema.equals("https") && (serverPort != 443));
     }
 
-    public int getLocalPort() {
-        return localPort;
-    }
-    
     public String getHostName() {
         return name;
     }
@@ -90,11 +82,15 @@ public final class UrlPrefix implements Serializable {
         }
         return urlPrefix;
     }
-    
+
     public String getScheme() {
         return schema;
     }
-    
+
+    public String getUserInfo() {
+        return userInfo;
+    }
+
     public int getServerPort() {
         return serverPort;
     }

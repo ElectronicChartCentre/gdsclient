@@ -66,7 +66,7 @@ public class CatalogueParser implements Serializable {
     }
 
     public static CatalogueParser create(String urlPrefix) throws IOException, DocumentException {
-        return create(new UrlPrefix(new URL(urlPrefix)));
+        return create(new UrlPrefix(urlPrefix));
     }
 
     public static CatalogueParser create(byte[] catalogue) throws IOException, DocumentException {
