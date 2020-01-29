@@ -188,9 +188,7 @@ public class RemoteUpdateClient {
                     throw new IOException(
                             "Expected CRC32 " + expectedCrc + ", but got " + realCrc + " for " + file.getPath());
                 }
-                
             }
-            receiver.receive(file.getPath(), new URL(fileUrl.toString()).openStream());
         }
 
     }
