@@ -1,7 +1,6 @@
 package no.ecc.gdsclient.ws.client;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.StringTokenizer;
 
 import javax.xml.rpc.ServiceException;

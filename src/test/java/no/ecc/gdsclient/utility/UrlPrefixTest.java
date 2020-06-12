@@ -1,7 +1,6 @@
 package no.ecc.gdsclient.utility;
 
 import junit.framework.TestCase;
-import no.ecc.gdsclient.utility.UrlPrefix;
 
 public class UrlPrefixTest extends TestCase {
 
