@@ -11,6 +11,7 @@ public class CatalogueParserTest extends GdsClientTestCase {
     public void testCatalogueParser() throws IOException, DocumentException {
         CatalogueParser cp = CatalogueParser.create(getAnonUrlPrefix());
         assertFalse(cp.getCells().isEmpty());
+        assertFalse(cp.getDataSets().isEmpty());
     }
 
 }

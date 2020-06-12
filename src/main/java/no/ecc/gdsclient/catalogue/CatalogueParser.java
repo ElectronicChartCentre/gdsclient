@@ -45,6 +45,8 @@ public class CatalogueParser implements Serializable {
 
     private final Map<String, Cell> cellById = new HashMap<>();
     private final Multimap<String, Cell> cellsByCountryCode = HashMultimap.create();
+    private final Map<String, DataSet> dataSetById = new HashMap<>();
+    private final Multimap<String, DataSet> dataSetsByCountryCode = HashMultimap.create();
     private final Map<String, Product> productById = new HashMap<>();
     private final Map<Integer, Country> countryById = new HashMap<>();
     private final Multimap<String, Country> countriesByCode = HashMultimap.create();
@@ -130,6 +132,13 @@ public class CatalogueParser implements Serializable {
                 p.cellsByCountryCode.put(cell.getCountry().getCode(), cell);
             }
 
+            List<Element> dataSetNodes = catalogue.selectNodes("/catalogue/dataSets/dataSet");
+            for (Element dataSetNode : dataSetNodes) {
+                DataSet dataSet = DataSet.parse(p, dataSetNode);
+                p.dataSetById.put(dataSet.getDataSetId(), dataSet);
+                p.dataSetsByCountryCode.put(dataSet.getCountry().getCode(), dataSet);
+            }
+
             List<Element> productTypeNodes = catalogue.selectNodes("/catalogue/producttypes/producttype");
             for (Element productTypeNode : productTypeNodes) {
                 ProductType pt = ProductType.parse(productTypeNode);
@@ -173,6 +182,14 @@ public class CatalogueParser implements Serializable {
     public String getTitleForCell(String cellId) {
         Cell cell = getCell(cellId);
         return cell == null ? null : cell.getTitle();
+    }
+
+    public DataSet getDataSet(String dataSetId) {
+        return dataSetById.get(dataSetId);
+    }
+    
+    public Collection<DataSet> getDataSets() {
+        return Collections.unmodifiableCollection(dataSetById.values());
     }
 
     public Collection<Cell> getCells() {
@@ -367,6 +384,148 @@ public class CatalogueParser implements Serializable {
             return cellId + "," + edtn + "," + updn + "," + getReissue();
         }
 
+    }
+
+    public static final class DataSet implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        private String dataSetId;
+        private String title;
+        private Integer edtn;
+        private Integer updn;
+        private Integer reissue = Integer.valueOf(0);
+        private Country country;
+        private Integer prodSpecNr;
+        private String coverageWkt;
+        private final Envelope envelope = new Envelope();
+
+        private final List<Product> products = new ArrayList<Product>();
+
+        private static DataSet parse(CatalogueParser parser, Element dataSetNode) {
+            DataSet dataSet = new DataSet();
+
+            double nlat = Double.NaN;
+            double slat = Double.NaN;
+            double elon = Double.NaN;
+            double wlon = Double.NaN;
+
+            for (int i = 0, size = dataSetNode.nodeCount(); i < size; i++) {
+                Node node = dataSetNode.node(i);
+                if (node instanceof Element) {
+                    Element cellSubEl = (Element) node;
+                    String n = cellSubEl.getName();
+                    String value = cellSubEl.getText();
+
+                    if ("dataSetId".equals(n)) {
+                        dataSet.dataSetId = value;
+                    } else if ("cell_title".equals(n)) {
+                        dataSet.title = StringEscapeUtils.unescapeXml(value);
+                    } else if ("countryId".equals(n)) {
+                        Integer countryId = Integer.valueOf(value);
+                        dataSet.country = parser.getCountry(countryId);
+                    } else if ("coverage".equals(n)) {
+                        dataSet.coverageWkt = value;
+                    } else if ("nlat".equals(n)) {
+                        nlat = Double.valueOf(value);
+                    } else if ("slat".equals(n)) {
+                        slat = Double.valueOf(value);
+                    } else if ("wlon".equals(n)) {
+                        wlon = Double.valueOf(value);
+                    } else if ("elon".equals(n)) {
+                        elon = Double.valueOf(value);
+                    } else if ("updn".equals(n)) {
+                        dataSet.updn = Integer.valueOf(value);
+                    } else if ("reissue".equals(n)) {
+                        dataSet.reissue = Integer.valueOf(value);
+                    } else if ("prodSpecNr".equals(n)) {
+                        dataSet.prodSpecNr = Integer.valueOf(value);
+                    }
+                }
+            }
+
+            if (!Double.isNaN(nlat) && !Double.isNaN(slat) && !Double.isNaN(wlon) && !Double.isNaN(elon)) {
+                dataSet.envelope.expandToInclude(wlon, slat);
+                dataSet.envelope.expandToInclude(elon, nlat);
+            }
+
+            return dataSet;
+        }
+
+        private DataSet() {
+
+        }
+
+        public String getDataSetId() {
+            return dataSetId;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public Integer getEdtn() {
+            return edtn;
+        }
+
+        public Integer getUpdn() {
+            return updn;
+        }
+
+        public Country getCountry() {
+            return country;
+        }
+
+        public Integer getProdSpecNr() {
+            return prodSpecNr;
+        }
+
+        public Geometry getCoverage() throws com.vividsolutions.jts.io.ParseException {
+            if (coverageWkt == null) {
+                return null;
+            }
+
+            WKTReader reader = new WKTReader();
+            return reader.read(coverageWkt);
+        }
+
+        public Envelope getEnvelope() {
+            return new Envelope(envelope);
+        }
+
+        private void addProduct(Product p) {
+            products.add(p);
+        }
+
+        @Override
+        public int hashCode() {
+            return getDataSetId().hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (obj == this) {
+                return true;
+
+            }
+            if (!(obj instanceof DataSet)) {
+                return false;
+            }
+            DataSet o = (DataSet) obj;
+            return getDataSetId().equals(o.getDataSetId());
+        }
+
+        public Integer getReissue() {
+            return reissue;
+        }
+
+        public String getIdString() {
+            return dataSetId + "," + edtn + "," + updn + "," + getReissue();
+        }
+
         @Override
         public String toString() {
             return getIdString();
@@ -385,7 +544,8 @@ public class CatalogueParser implements Serializable {
         private Integer priceBand;
         private ProductType productType;
 
-        private final Set<Cell> cells = new HashSet<Cell>();
+        private final Set<Cell> cells = new HashSet<>();
+        private final Set<DataSet> dataSets = new HashSet<>();
 
         private static Product parse(CatalogueParser parser, Element productElement) {
             Product p = new Product();
@@ -412,6 +572,16 @@ public class CatalogueParser implements Serializable {
                                 cell.addProduct(p);
                             }
                         }
+                        if ((cellNode instanceof Element) && cellNode.getName().equals("dataSet_in_product")) {
+                            Element cellElement = (Element) cellNode;
+                            String dataSetId = cellElement.attributeValue("id");
+                            DataSet dataSet = parser.getDataSet(dataSetId);
+                            if (dataSet != null) {
+                                p.addDataSet(dataSet);
+                                dataSet.addProduct(p);
+                            }
+                        }
+
                     }
                 }
             }
@@ -451,9 +621,18 @@ public class CatalogueParser implements Serializable {
             return Collections.unmodifiableSet(cells);
         }
 
+        private void addDataSet(DataSet d) {
+            dataSets.add(d);
+        }
+
+        public Set<DataSet> getDataSets() {
+            return Collections.unmodifiableSet(dataSets);
+        }
+
         public ProductType getProductType() {
             return productType;
         }
+
     }
 
     public static final class Country implements Serializable {
