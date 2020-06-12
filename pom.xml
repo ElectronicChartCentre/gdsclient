@@ -14,7 +14,7 @@
 	<repositories>
 		<repository>
 			<id>ECC Repository</id>
-			<url>https://github.com/ElectronicChartCentre/ecc-mvn-repo/raw/master/releases</url>
+			<url>https://maven.ecc.no/releases</url>
 		</repository>
 	</repositories>
     <build>
