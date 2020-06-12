@@ -1,6 +1,10 @@
 package no.ecc.gdsclient.ws.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import no.ecc.gdsclient.catalogue.CatalogueParser;
+import no.ecc.gdsclient.catalogue.CatalogueParser.DataSet;
 import no.ecc.gdsclient.catalogue.CatalogueParser.Product;
 import no.ecc.gdsclient.junit.GdsClientTestCase;
 import no.ecc.gdsclient.ws.impl.CustomerInfo;
@@ -20,7 +24,19 @@ public class OrderClientTest extends GdsClientTestCase {
         oc.setUrlPrefix(getUrlPrefix());
 
         CatalogueParser cp = CatalogueParser.create(getUrlPrefix());
-        Product product = cp.getProducts().iterator().next();
+
+        List<Product> products = new ArrayList<>();
+        products.add(cp.getProducts().iterator().next());
+
+        for (DataSet dataSet : cp.getDataSets()) {
+            Product dataSetProduct = cp.getProduct(dataSet.getDataSetId());
+            if (dataSetProduct != null) {
+                products.add(dataSetProduct);
+                break;
+            }
+        }
+
+        assertEquals(2, products.size());
 
         IdName[] dists = dc.getDistributorIdNames();
         assertTrue(dists.length > 0);
@@ -46,13 +62,16 @@ public class OrderClientTest extends GdsClientTestCase {
         assertTrue(vesselId > 0);
         vi = dc.getVesselInfo(vesselId);
 
-        OrderProductRequest opr = new OrderProductRequest();
-        opr.setProductId(product.getProductId());
-        opr.setQuantity(1);
-        opr.setSubscriptionTypeId(1);
+        List<OrderProductRequest> oprs = new ArrayList<>();
+        for (Product product : products) {
+            OrderProductRequest opr = new OrderProductRequest();
+            opr.setProductId(product.getProductId());
+            opr.setQuantity(1);
+            opr.setSubscriptionTypeId(1);
+        }
 
         OrderRequest or = new OrderRequest();
-        or.setOrderProducts(new OrderProductRequest[] { opr });
+        or.setOrderProducts(oprs.toArray(new OrderProductRequest[oprs.size()]));
         or.setUserId(vi.getUserId());
 
         int orderId = oc.placeOrder(or);
@@ -60,7 +79,7 @@ public class OrderClientTest extends GdsClientTestCase {
 
         OrderReport orderReport = oc.getOrderReport(orderId);
         assertNotNull(orderReport);
-        assertEquals(1, orderReport.getOrderProducts().length);
+        assertEquals(oprs.size(), orderReport.getOrderProducts().length);
 
         // to activate the order
         // oc.activateOrder(orderId, false);
