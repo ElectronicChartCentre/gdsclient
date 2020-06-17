@@ -15,7 +15,7 @@ import no.ecc.gdsclient.ws.impl.OrderRequest;
 import no.ecc.gdsclient.ws.impl.VesselInfo;
 
 public class OrderClientTest extends GdsClientTestCase {
-
+    
     public void testOrder() throws Exception {
         DistributorClient dc = new DistributorClient();
         dc.setUrlPrefix(getUrlPrefix());
@@ -67,7 +67,8 @@ public class OrderClientTest extends GdsClientTestCase {
             OrderProductRequest opr = new OrderProductRequest();
             opr.setProductId(product.getProductId());
             opr.setQuantity(1);
-            opr.setSubscriptionTypeId(1);
+            opr.setSubscriptionTypeId(0);
+            oprs.add(opr);
         }
 
         OrderRequest or = new OrderRequest();
@@ -76,6 +77,7 @@ public class OrderClientTest extends GdsClientTestCase {
 
         int orderId = oc.placeOrder(or);
         assertTrue(orderId > 0);
+        getLogger().info("created quotation: order_id=" + orderId);
 
         OrderReport orderReport = oc.getOrderReport(orderId);
         assertNotNull(orderReport);

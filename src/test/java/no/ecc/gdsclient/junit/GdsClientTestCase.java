@@ -1,10 +1,14 @@
 package no.ecc.gdsclient.junit;
 
+import java.util.logging.Logger;
+
 import junit.framework.TestCase;
 
 public abstract class GdsClientTestCase extends TestCase {
 
     private static final String URL_PREFIX_KEY = "URL_PREFIX";
+
+    private Logger log;
 
     protected String getUrlPrefix() {
         String urlPrefix = System.getProperty(URL_PREFIX_KEY);
@@ -30,6 +34,13 @@ public abstract class GdsClientTestCase extends TestCase {
             return defaultAnonUrlPrefix;
         }
         return urlPrefix;
+    }
+
+    protected Logger getLogger() {
+        if (log == null) {
+            log = Logger.getLogger(getClass().getName());
+        }
+        return log;
     }
 
 }
