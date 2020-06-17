@@ -1,7 +1,5 @@
 package no.ecc.gdsclient.cli;
 
-import java.util.Arrays;
-
 import no.ecc.gdsclient.utility.UrlPrefix;
 import no.ecc.gdsclient.ws.client.DistributorClient;
 import no.ecc.gdsclient.ws.impl.VesselInfo;
