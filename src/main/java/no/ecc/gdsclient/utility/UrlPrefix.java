@@ -8,6 +8,8 @@ import java.io.Serializable;
 public final class UrlPrefix implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    public static final String URL_PREFIX_KEY = "URL_PREFIX";
 
     private final String schema;
     private final String name;

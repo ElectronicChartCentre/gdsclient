@@ -11,29 +11,46 @@
         <maven.compile.target>11</maven.compile.target>
         <log4j.version>2.0.2</log4j.version>
     </properties>
-	<repositories>
-		<repository>
-			<id>ECC Repository</id>
-			<url>https://maven.ecc.no/releases</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>ECC Repository</id>
+            <url>https://maven.ecc.no/releases</url>
+        </repository>
+    </repositories>
     <build>
         <plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-    			<configuration>
-        			<release>11</release>
-    			</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <release>11</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>with-deps</shadedClassifierName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
         <dependency>
-			<groupId>no.ecc.axis</groupId>
-			<artifactId>axis</artifactId>
-			<version>1.5.2</version>
+            <groupId>no.ecc.axis</groupId>
+            <artifactId>axis</artifactId>
+            <version>1.5.2</version>
         </dependency>
         <dependency>
             <groupId>com.vividsolutions</groupId>
