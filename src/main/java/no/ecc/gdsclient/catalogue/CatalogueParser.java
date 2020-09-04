@@ -75,7 +75,6 @@ public class CatalogueParser implements Serializable {
         return create(new ByteArrayInputStream(catalogue));
     }
 
-    @SuppressWarnings("unchecked")
     static CatalogueParser create(InputStream in) throws IOException, DocumentException {
         ZipInputStream zinstream = null;
         try {
@@ -104,55 +103,55 @@ public class CatalogueParser implements Serializable {
                 }
             }
 
-            List<Element> saleReportGroupNodes = catalogue.selectNodes("/catalogue/saleReportGroups/saleReportGroup");
-            for (Element node : saleReportGroupNodes) {
-                SaleReportGroup srg = SaleReportGroup.parse(node);
+            List<Node> saleReportGroupNodes = catalogue.selectNodes("/catalogue/saleReportGroups/saleReportGroup");
+            for (Node node : saleReportGroupNodes) {
+                SaleReportGroup srg = SaleReportGroup.parse((Element) node);
                 p.saleReportGroupById.put(srg.getId(), srg);
             }
 
-            List<Element> subscriptionTypeNodes = catalogue
+            List<Node> subscriptionTypeNodes = catalogue
                     .selectNodes("/catalogue/subscriptionTypes/subscriptionType");
-            for (Element subscriptionTypeNode : subscriptionTypeNodes) {
-                SubscriptionType subscriptionType = SubscriptionType.parse(subscriptionTypeNode);
+            for (Node subscriptionTypeNode : subscriptionTypeNodes) {
+                SubscriptionType subscriptionType = SubscriptionType.parse((Element) subscriptionTypeNode);
                 p.subscriptionTypeById.put(subscriptionType.getId(), subscriptionType);
             }
 
-            List<Element> countryNodes = catalogue.selectNodes("/catalogue/countries/country");
-            for (Element countryNode : countryNodes) {
-                Country country = Country.parse(p, countryNode);
+            List<Node> countryNodes = catalogue.selectNodes("/catalogue/countries/country");
+            for (Node countryNode : countryNodes) {
+                Country country = Country.parse(p, (Element) countryNode);
                 country.saleReportGroup = p.saleReportGroupById.get(country.saleReportGroupId);
                 p.countryById.put(country.getId(), country);
                 p.countriesByCode.put(country.getCode(), country);
             }
 
-            List<Element> cellNodes = catalogue.selectNodes("/catalogue/enc/cell");
-            for (Element cellNode : cellNodes) {
-                Cell cell = Cell.parse(p, cellNode);
+            List<Node> cellNodes = catalogue.selectNodes("/catalogue/enc/cell");
+            for (Node cellNode : cellNodes) {
+                Cell cell = Cell.parse(p, (Element) cellNode);
                 p.cellById.put(cell.getCellId(), cell);
                 p.cellsByCountryCode.put(cell.getCountry().getCode(), cell);
             }
 
-            List<Element> dataSetNodes = catalogue.selectNodes("/catalogue/dataSets/dataSet");
-            for (Element dataSetNode : dataSetNodes) {
-                DataSet dataSet = DataSet.parse(p, dataSetNode);
+            List<Node> dataSetNodes = catalogue.selectNodes("/catalogue/dataSets/dataSet");
+            for (Node dataSetNode : dataSetNodes) {
+                DataSet dataSet = DataSet.parse(p, (Element) dataSetNode);
                 p.dataSetById.put(dataSet.getDataSetId(), dataSet);
                 p.dataSetsByCountryCode.put(dataSet.getCountry().getCode(), dataSet);
             }
 
-            List<Element> productTypeNodes = catalogue.selectNodes("/catalogue/producttypes/producttype");
-            for (Element productTypeNode : productTypeNodes) {
-                ProductType pt = ProductType.parse(productTypeNode);
-                List<Element> productNodes = productTypeNode.selectNodes("products/product");
-                for (Element productNode : productNodes) {
-                    Product product = Product.parse(p, productNode);
+            List<Node> productTypeNodes = catalogue.selectNodes("/catalogue/producttypes/producttype");
+            for (Node productTypeNode : productTypeNodes) {
+                ProductType pt = ProductType.parse((Element) productTypeNode);
+                List<Node> productNodes = productTypeNode.selectNodes("products/product");
+                for (Node productNode : productNodes) {
+                    Product product = Product.parse(p, (Element) productNode);
                     product.productType = pt;
                     p.productById.put(product.getProductId(), product);
                 }
             }
 
-            List<Element> productReplaceNodes = catalogue.selectNodes("/catalogue/productReplaces/productReplace");
-            for (Element productReplaceNode : productReplaceNodes) {
-                ProductReplace pr = ProductReplace.parse(p, productReplaceNode);
+            List<Node> productReplaceNodes = catalogue.selectNodes("/catalogue/productReplaces/productReplace");
+            for (Node productReplaceNode : productReplaceNodes) {
+                ProductReplace pr = ProductReplace.parse(p, (Element) productReplaceNode);
                 p.productReplaces.add(pr);
             }
 
