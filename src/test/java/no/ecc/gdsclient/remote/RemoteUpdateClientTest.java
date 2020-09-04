@@ -48,7 +48,7 @@ public class RemoteUpdateClientTest extends GdsClientTestCase {
 
         S100Crypt dataPermitCrypt = new S100Crypt.EmptyIVNoPadding(hwId);
 
-        String urlPrefix = "https://primars101.ecc.no/primars101";
+        String urlPrefix = "https://primar.ecc.no/primar";
         List<CellUpdate> status = Collections.emptyList();
         Map<String, S100DataPermit> dataPermitByDataSetId = new HashMap<>();
         Map<String, String> fileStartAsStringByFileName = new HashMap<>();
