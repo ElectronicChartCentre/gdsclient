@@ -79,6 +79,36 @@ public class CellDownloadClient extends CommonClient {
         }
     }
 
+    public boolean downloadForVessel(Integer vesselId, boolean encrypted, Date fromDate, Integer maxMBInExchangeset, Boolean ignoreDenied) throws RemoteException {
+        Call call;
+        try {
+            call = getNewCall();
+            call.setTimeout(Integer.valueOf(1000 * 60 * 30)); // millis
+            call.setOperationName(new QName("CellDownloadService", "downloadForVessel"));
+            QName cellInfoArrayQn = new QName("http://stubs.ws.gds.ecc.no", "ArrayOf_tns1_CellInfo");
+            call.registerTypeMapping(CellInfo[].class, cellInfoArrayQn,
+                    new ArraySerializerFactory(), new ArrayDeserializerFactory());
+            QName cellInfoQn = new QName("urn:BeanService", "CellInfo");
+            call.registerTypeMapping(CellInfo.class, cellInfoQn, new BeanSerializerFactory(
+                    CellInfo.class, cellInfoQn), new BeanDeserializerFactory(CellInfo.class,
+                    cellInfoQn));
+
+            call.addParameter("vesselId", XMLType.XSD_INTEGER, ParameterMode.IN);
+            call.addParameter("encrypted", XMLType.XSD_BOOLEAN, ParameterMode.IN);
+            call.addParameter("fromDate", XMLType.XSD_DATETIME, ParameterMode.IN);
+            call.addParameter("maxMBInExchangeset", XMLType.XSD_INTEGER, ParameterMode.IN);
+            call.addParameter("ignoreDenied", XMLType.XSD_BOOLEAN, ParameterMode.IN);
+            call.setReturnType(XMLType.XSD_BOOLEAN);
+
+            Boolean r = (Boolean) call.invoke(new Object[] { vesselId, Boolean.valueOf(encrypted), fromDate, maxMBInExchangeset, ignoreDenied });
+            return r.booleanValue();
+        } catch (MalformedURLException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (ServiceException e) {
+            throw new RemoteException(e.getMessage());
+        }
+    }
+
     public FileDownloadWrapper get(int index) throws RemoteException {
         Call call;
         try {
