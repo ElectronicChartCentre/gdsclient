@@ -12,7 +12,6 @@ public abstract class GdsClientTestCase extends TestCase {
     private static final String VESSEL_ID = "VESSEL_ID";
 
     protected String getUrlPrefix() {
-        // return "http://mats:superhemmelig@127.0.0.1:8080/utvikling/";
         String urlPrefix = System.getProperty(UrlPrefix.URL_PREFIX_KEY);
         if (urlPrefix == null) {
             urlPrefix = System.getenv(UrlPrefix.URL_PREFIX_KEY);
