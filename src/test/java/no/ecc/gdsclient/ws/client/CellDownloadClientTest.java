@@ -64,6 +64,7 @@ public class CellDownloadClientTest extends GdsClientTestCase {
     }
 
     public void testDownloadForVessel() throws IOException {
+        
         CellDownloadClient c = new CellDownloadClient();
         c.setUrlPrefix(getUrlPrefix());
 
@@ -71,7 +72,7 @@ public class CellDownloadClientTest extends GdsClientTestCase {
         calendar.add(Calendar.YEAR, -1);
 
         try {
-            assertTrue(c.downloadForVessel(16782, true, calendar.getTime(), null, true));
+            assertTrue(c.downloadForVessel(getVesselId(), true, calendar.getTime(), null, true));
 
             int i = 0;
             while (true) {
