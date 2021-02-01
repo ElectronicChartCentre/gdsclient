@@ -9,6 +9,8 @@ public abstract class GdsClientTestCase extends TestCase {
 
     private Logger log;
 
+    private static final String VESSEL_ID = "VESSEL_ID";
+
     protected String getUrlPrefix() {
         String urlPrefix = System.getProperty(UrlPrefix.URL_PREFIX_KEY);
         if (urlPrefix == null) {
@@ -33,6 +35,24 @@ public abstract class GdsClientTestCase extends TestCase {
             return defaultAnonUrlPrefix;
         }
         return urlPrefix;
+    }
+
+    protected Integer getVesselId() {
+        Integer vesselId;
+
+        try {
+            vesselId = Integer.parseInt(System.getProperty(VESSEL_ID));
+        } catch (NumberFormatException e) {
+            try {
+                vesselId = Integer.parseInt(System.getenv(VESSEL_ID));
+            } catch (NumberFormatException e2) {
+                fail("missing property " + VESSEL_ID
+                        + ", set the id of a vessel under a distributor the authenticated user has access to.");
+                        return null;
+            }
+        }
+
+        return vesselId;
     }
 
     protected Logger getLogger() {
