@@ -58,4 +58,24 @@ public class ProductClient extends CommonClient {
             throw new RemoteException(e.getMessage());
         }
     }
+    
+    public String createPermitFile(Integer vesselId, String userPermit, int year, int week) throws RemoteException {
+        Call call;
+        try {
+            call = getNewCall();
+            call.setOperationName(new QName("ProductService", "createPermitFile"));
+            call.setReturnType(XMLType.XSD_STRING);
+            call.addParameter("vesselId", XMLType.XSD_INTEGER, ParameterMode.IN);
+            call.addParameter("userPermit", XMLType.XSD_STRING, ParameterMode.IN);
+            call.addParameter("year", XMLType.XSD_INTEGER, ParameterMode.IN);
+            call.addParameter("week", XMLType.XSD_INTEGER, ParameterMode.IN);
+            String permitFile = (String) call.invoke(new Object[] { vesselId, userPermit, year, week });
+            return permitFile;
+        } catch (MalformedURLException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (ServiceException e) {
+            throw new RemoteException(e.getMessage());
+        }
+    }
+
 }
