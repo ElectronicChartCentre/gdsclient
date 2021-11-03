@@ -3,6 +3,7 @@ package no.ecc.gdsclient.cli;
 import no.ecc.gdsclient.utility.UrlPrefix;
 import no.ecc.gdsclient.ws.client.OrderClient;
 import no.ecc.gdsclient.ws.impl.OrderProductRequest;
+import no.ecc.gdsclient.ws.impl.OrderReport;
 import no.ecc.gdsclient.ws.impl.OrderRequest;
 
 public class Order {
@@ -49,10 +50,15 @@ public class Order {
                 Boolean r = oc.activateOrder(orderId, true);
                 System.out.println("activateOrder returned " + r);
                 return;
+            } else if (args.length == 2 && command.equals("getOrderReport")) {
+                int orderId = Integer.parseInt(args[1]);
+                OrderReport orderReport = oc.getOrderReport(orderId);
+                System.out.println("orderReport returned " + orderReport);
+                return;
             }
         }
 
-        System.err.println("Usage: ..Order [placeOrder userId PRODUCTA,PRODUCTB subscriptionTypeId|activateOrder orderId] "
+        System.err.println("Usage: ..Order [placeOrder userId PRODUCTA,PRODUCTB subscriptionTypeId|activateOrder orderId|getOrderReport orderId] "
                 + UrlPrefix.URL_PREFIX_KEY
                 + " set to something like https://username:password@qaprimar.ecc.no/qaprimar");
         System.exit(-1);

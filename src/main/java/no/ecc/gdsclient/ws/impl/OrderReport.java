@@ -2,6 +2,7 @@ package no.ecc.gdsclient.ws.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -149,6 +150,11 @@ public class OrderReport {
             productIds.add(p.getProductId());
         }
         return productIds.toArray(new String[productIds.size()]);
+    }
+    
+    @Override
+    public String toString() {
+        return super.toString() + "{orderProducts: " + Arrays.asList(getOrderProducts()) + "}";
     }
 	
 }

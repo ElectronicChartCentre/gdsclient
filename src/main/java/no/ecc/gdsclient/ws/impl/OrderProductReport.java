@@ -104,5 +104,10 @@ public class OrderProductReport {
     public void setQuantity(Integer q) {
         _quantity = q;
     }
+    
+    @Override
+    public String toString() {
+        return super.toString() + "{productId: " + getProductId() + "}";
+    }
 
 }
