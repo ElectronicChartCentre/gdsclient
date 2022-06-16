@@ -5,6 +5,9 @@ using NamespaceName;
 String username = "";
 String password = "";
 String serviceBasicUrl = "";
+String dummyUserPermit = "";
+
+
 int distId = -1;
 int custId = -1;
 int vesselId = -1;
@@ -68,6 +71,7 @@ using (DistributorServiceV2Client serviceClient = new DistributorServiceV2Client
     bool cOk = serviceClient.saveCustomerInfo(customerInfo);
     custId = customerId;
     Console.WriteLine("Customer saved: " + cOk);
+   
 
 
     //New vessel
@@ -100,6 +104,30 @@ using (DistributorServiceV2Client serviceClient = new DistributorServiceV2Client
     bool vOk = serviceClient.saveVesselInfo(vesselInfo);
     Console.WriteLine("Vessel saved: " + vOk);
     userId = vesselInfo.userId;
+    vesselId = (int) vesselInfo.vesselId;
+
+
+    UserPermit[] userPermits = serviceClient.getUserPermitsForVessel(vesselId);
+    if (userPermits.Length == 0) {
+        try
+        {
+            UserPermit userPermit = new UserPermit();
+            userPermit.userId = vesselInfo.userId;
+            userPermit.name = "Test";
+            userPermit.userPermitString = dummyUserPermit;
+            userPermit.comments = "For test purpose";
+            userPermit.isBackupSystem = false;
+           
+            bool up = serviceClient.saveUserPermit(userPermit);
+            Console.WriteLine("User permit saved: " + up);
+            userPermits = serviceClient.getUserPermitsForVessel(vesselId);
+            
+        }
+        catch (Exception e) {
+            Console.WriteLine(e);
+        }
+    }
+    Console.WriteLine("Number of userpermits: " + userPermits.Length);
 
 }
 
@@ -162,7 +190,9 @@ using (CellDownloadServiceV2Client downloadClient = new CellDownloadServiceV2Cli
         //break to not potentially download thousands of exchange nodes
         if (i > 5) break;
     }
-    Console.WriteLine(ok);
+    downloadClient.finish();
+    Console.WriteLine("Download: " + ok);
 }
+
 
 
