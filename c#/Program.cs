@@ -172,6 +172,8 @@ using (OrderServiceV2Client orderClient = new OrderServiceV2Client(binding, remo
 }
 
 System.ServiceModel.EndpointAddress remoteDownloadAddress = commonClient.GetEndpointAddress("CellDownloadServiceV2");
+
+// download for a vessel
 using (CellDownloadServiceV2Client downloadClient = new CellDownloadServiceV2Client(binding, remoteDownloadAddress))
 {
     downloadClient.ClientCredentials.UserName.UserName = username;
@@ -194,5 +196,31 @@ using (CellDownloadServiceV2Client downloadClient = new CellDownloadServiceV2Cli
     Console.WriteLine("Download: " + ok);
 }
 
+// download data not related to a single vessel, but based on a list of cellIds and client status
+using (CellDownloadServiceV2Client downloadClient = new CellDownloadServiceV2Client(binding, remoteDownloadAddress))
+{
+    downloadClient.ClientCredentials.UserName.UserName = username;
+    downloadClient.ClientCredentials.UserName.Password = password;
+    bool encrypted = false;
+    DateTime fromDate = DateTime.MinValue;
+    DateTime toDate = DateTime.Now;
+    string[] cellIds = new string[]{"NO4D3143"};
+    CellInfo[] status = new CellInfo[]{};
+    bool ok = downloadClient.download(encrypted, fromDate, toDate, cellIds, status);
+    int i = 0;
+    while (true)
+    {
+        FileDownloadWrapper f = downloadClient.get(i++);
+        if (f == null)
+        {
+            break;
+        }
+        Console.WriteLine(f.path);
+        //break to not potentially download thousands of exchange nodes
+        if (i > 5) break;
+    }
+    downloadClient.finish();
+    Console.WriteLine("Download: " + ok);
+}
 
 
