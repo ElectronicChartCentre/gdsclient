@@ -14,6 +14,13 @@ For `VESSEL_ID` switch out vesselId with id of a vessel under a distributor the 
 URL_PREFIX="https://username:password@host/context" VESSEL_ID=vesselId mvn test
 ``` 
 
+## Run CLI
+
+```
+% mvn package -DskipTests=true
+java -cp target/gdsclient-1.0-SNAPSHOT-with-deps.jar -DURL_PREFIX="https://username:password@qaprimar.ecc.no/qaprimar" no.ecc.gdsclient.cli.Order placeOrder MYUSERID PRODUCTID 1
+```
+
 ## C# Examples
 
 We have created a few examples in C# for how to utilize our soap interface in C#. It is simple examples of adding and modifying customers, vessels, placing and activating orders. These can be found [here](https://github.com/ElectronicChartCentre/gdsclient/blob/master/c%23/Program.cs) 
