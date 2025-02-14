@@ -15,6 +15,7 @@ import org.apache.axis.encoding.ser.BeanDeserializerFactory;
 import org.apache.axis.encoding.ser.BeanSerializerFactory;
 
 import no.ecc.gdsclient.ws.impl.ProductPermit;
+import no.ecc.gdsclient.ws.impl.ProductPrice;
 
 public class ProductClient extends CommonClient {
 
@@ -71,6 +72,28 @@ public class ProductClient extends CommonClient {
             call.addParameter("week", XMLType.XSD_INTEGER, ParameterMode.IN);
             String permitFile = (String) call.invoke(new Object[] { vesselId, userPermit, year, week });
             return permitFile;
+        } catch (MalformedURLException e) {
+            throw new RemoteException(e.getMessage());
+        } catch (ServiceException e) {
+            throw new RemoteException(e.getMessage());
+        }
+    }
+
+    public ProductPrice[] getProductPrices() throws RemoteException {
+        Call call;
+        try {
+            call = getNewCall();
+            call.setTimeout(Integer.valueOf(1000 * 60 * 3)); // millis
+            call.setOperationName(new QName("ProductService", "getProductPrices"));
+            QName qn = new QName("http://stubs.ws.gds.ecc.no", "ArrayOf_tns1_ProductPrice");
+            call.registerTypeMapping(ProductPrice[].class, qn, new ArraySerializerFactory(),
+                    new ArrayDeserializerFactory());
+            call.setReturnType(qn);
+            qn = new QName("urn:BeanService", "ProductPrice");
+            call.registerTypeMapping(ProductPrice.class, qn, new BeanSerializerFactory(ProductPrice.class, qn),
+                    new BeanDeserializerFactory(ProductPrice.class, qn));
+            ProductPrice[] pp = (ProductPrice[]) call.invoke(new Object[] {});
+            return pp;
         } catch (MalformedURLException e) {
             throw new RemoteException(e.getMessage());
         } catch (ServiceException e) {
